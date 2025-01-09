@@ -55,7 +55,7 @@ public class WavUtils {
             String extension = FilenameUtils.getExtension(srcFile.getName()).toLowerCase();
             String osName = System.getProperty("os.name");
             String ffmpeg = "ffmpeg";
-            String quot = "'";
+            String quot = "\"";
             if (osName.equalsIgnoreCase("Linux")) {
                 ffmpeg = "./ffmpeg";
                 quot = " ";
