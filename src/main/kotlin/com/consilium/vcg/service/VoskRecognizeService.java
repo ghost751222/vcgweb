@@ -120,11 +120,6 @@ public class VoskRecognizeService implements SttInterface {
     @NotNull
     private WebSocketAdapter getWebSocketAdapter(String userName, Path p, CountDownLatch receiveLatch) {
         CountDownLatch finalReceiveLatch = receiveLatch;
-        //                    result = String.format("<p start='%s'>%s</p>", jsonNode.get("result").get(0).get("start").asText(), result);
-        //
-        //
-        //                    result = result.replace("<", "&lt;");
-        //                    result = result.replace(">", "&gt;");
         return new WebSocketAdapter() {
             @Override
             public void onTextMessage(WebSocket websocket, String message) throws IOException {
@@ -132,12 +127,6 @@ public class VoskRecognizeService implements SttInterface {
                 if (jsonNode.has("result")) {
                     String result = jsonNode.get("text").asText().replace(" ", Strings.EMPTY);
                     result = ZhConverterUtil.toTraditional(result);
-//                    result = String.format("<p start='%s'>%s</p>", jsonNode.get("result").get(0).get("start").asText(), result);
-//
-//
-//                    result = result.replace("<", "&lt;");
-//                    result = result.replace(">", "&gt;");
-
                     PsttResponseDataVo rVo = new PsttResponseDataVo();
                     rVo.setUserName(userName);
                     rVo.setFileName(FilenameUtils.getName(p.toString()));
