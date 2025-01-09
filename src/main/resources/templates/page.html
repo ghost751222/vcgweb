@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>VCG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"/>
+    <script th:src="@{/js/lib/axios.min.js}"></script>
+    <script th:src="@{/js/lib/vue.min.js}"></script>
+    <script th:src="@{/js/lib/sockjs.min.js}"></script>
+    <script th:src="@{/js/lib/stomp.js}"></script>
+    <style type="text/css">
+        html,body{
+            width:100%;
+            height:100%;
+            background-color: rgba(0,0,0,.09);
+        }
+        .circle{
+             width:150px;
+             height:150px;
+             border-radius:50%;
+             border:10px solid #337ab7;
+             border-left:10px solid transparent;
+             animation:rotateAnimation 3s linear infinite;
+             position:relative;
+             left:45%;
+             top:28%;
+        }
+
+        @keyframes rotateAnimation {
+            from{transform:rotate(0deg);}
+            to{transform:rotate(360deg);}
+        }
+        @keyframes fadeAnimationFrames{
+             0% {opacity:0;}
+             100% {opacity:1;}
+        }
+
+        .fadeAnimation{
+            animation: fadeAnimationFrames 2s infinite;
+        }
+
+        .hide{
+          display:none;
+        }
+        .modal{
+            width:100%;
+            height:100%;
+            display:block;
+            background-color:black;
+            opacity: .4;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="modal hide" id="modal">
+    <div class="circle">
+
+    </div>
+</div>
+<div class="container">
+
+
+    <div class="row" id="app">
+
+
+        <form id="form" class="form" v-on:submit.prevent="upload">
+
+            <input name="userName" type="hidden" v-model="userName">
+
+            <div class="form-group">
+                <input type="file" name="file" id="file" accept="audio/mp3,audio/wav" multiple="multiple"/>
+
+            </div>
+
+            <div class="form-group">
+                <div v-for="r in radios">
+                    <input v-model="downloadTag" :value="r.value" type="radio"/>{{r.text}}
+                </div>
+
+
+            </div>
+
+            <div class="form-group">
+                <input type="submit" name="upload" class="btn btn-info btn-md"/>
+                <input type="button" value="下載" @click="download" class="btn btn-info btn-md"/>
+            </div>
+
+            <div class="form-group">
+                <textarea class="form-control" rows="30" v-model="result" style="display:none"></textarea>
+                <ul class="nav nav-tabs" id="tab" role="tablist">
+                    <li v-for="(t,index) in tabs" :class="{'nav-item':1,'active':t.active}">
+                        <a class="nav-link" :class="{'fadeAnimation':t.fade}" data-toggle="tab" :href="t.href"
+                           :fileName="t.fileName" role="tab" aria-controls="home" aria-selected="true"
+                           @click="tabClick">
+                            {{t.fileName}} {{t.statusText}}
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="tabContent">
+                    <div v-for="(t,index) in tabs"
+                         :class="{ 'show': t.active,'tab-pane':1,'hide':t.hide,'active':t.active }" role="tabpanel"
+                         :id="t.title">
+                        <textarea class="form-control" rows="30" v-model="t.result">{{t.result}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+</body>
+<script th:inline="javascript">
+    let url=[[@{/recognize}]];
+
+
+</script>
+<script th:src="@{/js/recognize.js}"></script>
+</html>
